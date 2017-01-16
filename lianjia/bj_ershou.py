@@ -95,6 +95,10 @@ dict_xpath = [
          "header": "环路",
          "xpath": "//div[@class='areaName']//span[@class='info']/text()[last()]"},
 
+        {"name": "subway",
+         "header": "地铁",
+         "xpath": "//div[@class='areaName']//a[@class='supplement']/text()"},
+
         {"name": "total_price",
          "header": "总价",
          "xpath": "//div[@class='overview']//span[@class='total']/text()"},
