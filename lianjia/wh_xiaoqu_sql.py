@@ -15,11 +15,12 @@ import sqlite3
 
 
 _FNAME_PREFIX = "c:/tmp/wuhan_xiaoqu_"
-_TIME = datetime.datetime.now().strftime('%Y_%m_%d')
+_TIME = datetime.datetime.now().strftime('%Y_%m_%d_%H%M%S')
+_DATE = datetime.datetime.now().strftime('%Y%m%d')
 _LOG_PATH = _FNAME_PREFIX + _TIME + ".csv"
 _SQLITE_DB = "wuhan.db"
 _ITEM_PER_PAGE = 30
-
+_TABLE_NAME = "xiaoqu_%s" % _TIME
 
 log_path = _LOG_PATH
 index = 0
@@ -30,6 +31,17 @@ total_page_number = 100
 
 
 conn = sqlite3.connect(_SQLITE_DB)
+sql_create_table = "CREATE TABLE [%s](\
+                  [url] CHAR PRIMARY KEY ON CONFLICT REPLACE UNIQUE ON CONFLICT REPLACE,\
+                  [name] CHAR, \
+                  [district] CHAR,\
+                  [businesscircle] CHAR,\
+                  [period] INTEGER, \
+                  [price] FLOAT, \
+                  [subway] CHAR, \
+                  [inputdate] CHAR);" % _TABLE_NAME
+conn.execute(sql_create_table)
+conn.commit()
 
 
 while os.path.exists(log_path):
@@ -147,17 +159,17 @@ for page_url in page_urls:
                 entry += prepare_entry(elements, number=True)
             else:
                 entry += prepare_entry(elements)
+        entry += _DATE
         if entry[-1:] == ",":
             entry = entry[:-1]
         entry += "\n"
         log.write(entry)
         sql_entry = prepare_sql_entry(entry)
-        sql = "REPLACE INTO xiaoqu (url, name, district, businesscircle, period, price, subway) VALUES (%s)" % sql_entry
+        sql = "REPLACE INTO %s (url, name, district, businesscircle, period, price, subway, inputdate) VALUES (%s)" % (_TABLE_NAME, sql_entry)
         print sql
         conn.execute(sql)
         conn.commit()
         print entry
         seq += 1
     time.sleep(random.uniform(30, 120))
-
 conn.close()
