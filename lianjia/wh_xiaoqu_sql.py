@@ -25,9 +25,8 @@ _TABLE_NAME = "xiaoqu_%s" % _TIME
 log_path = _LOG_PATH
 index = 0
 base_url = "http://wh.lianjia.com/xiaoqu/"
-page = "pg"
-sort = "cro11"
-total_page_number = 100
+#sort = "cro11"
+#total_page_number = 100
 
 
 conn = sqlite3.connect(_SQLITE_DB)
@@ -51,6 +50,11 @@ while os.path.exists(log_path):
 
 log = open(log_path, 'a')
 
+# 区县列表，遍历所有区县的小区，这样更完整
+district_list = ["jiangan", "jianghan", "qiaokou", "dongxihu", "wuchang", "qingshan", "hongshan", "hanyang"] # 江夏和黄陂现在有问题，不存在
+
+
+total_item_xpath = "//div[@class='content']//h2[@class='total fl']/span/text()"
 
 dict_xpath = [
     {"name": "url",
@@ -141,40 +145,51 @@ def prepare_sql_entry(entry):
         ret = ret[:-1]
     return ret
 
-page_urls = []
-for i in range(1, total_page_number + 1):
-    page_url = base_url + "pg" + str(i) + sort + "/"
-    page_urls.append(page_url)
-
 seq = 1
 
-for page_url in page_urls:
-    print page_url
+for district in district_list:
+    main_url = base_url + district + "/"
     try:
-        dom = get_dom_by_url(page_url)
+        dom = get_dom_by_url(main_url)
     except Exception, e:
-        print "Failed to open URL: %s" % page_url
+        print "Failed to open URL: %s" % main_url
         continue
-    for i in range(1, _ITEM_PER_PAGE + 1):
-        entry = str(seq) + ","
-        for name_xpath in dict_xpath:
-            xpath = name_xpath['xpath'].replace("INDEX", str(i))
-            elements = get_element_by_xpath(dom, xpath)
-            if name_xpath['name'] in to_number_list:
-                entry += prepare_entry(elements, number=True)
-            else:
-                entry += prepare_entry(elements)
-        entry += _DATE
-        if entry[-1:] == ",":
-            entry = entry[:-1]
-        entry += "\n"
-        log.write(entry)
-        sql_entry = prepare_sql_entry(entry)
-        sql = "REPLACE INTO %s (url, name, district, businesscircle, period, price, insale, subway, inputdate) VALUES (%s)" % (_TABLE_NAME, sql_entry)
-        print sql
-        conn.execute(sql)
-        conn.commit()
-        print entry
-        seq += 1
-    time.sleep(random.uniform(30, 120))
+    total_item_number = int(get_element_by_xpath(dom, total_item_xpath)[0])
+    total_page_number = (total_item_number+_ITEM_PER_PAGE-1)//_ITEM_PER_PAGE
+    print total_page_number
+    for i in range(1, total_page_number + 1):
+        page_url = main_url + "pg" + str(i) + "/"
+        print page_url
+        try:
+            dom = get_dom_by_url(page_url)
+        except Exception, e:
+            print "Failed to open URL: %s" % page_url
+            continue
+        item_number = 0
+        if total_item_number/i < _ITEM_PER_PAGE:
+            item_number = total_item_number-(_ITEM_PER_PAGE*(i-1))
+        else:
+            item_number = _ITEM_PER_PAGE
+        for i in range(1, item_number + 1):
+            entry = str(seq) + ","
+            for name_xpath in dict_xpath:
+                xpath = name_xpath['xpath'].replace("INDEX", str(i))
+                elements = get_element_by_xpath(dom, xpath)
+                if name_xpath['name'] in to_number_list:
+                    entry += prepare_entry(elements, number=True)
+                else:
+                    entry += prepare_entry(elements)
+            entry += _DATE
+            if entry[-1:] == ",":
+                entry = entry[:-1]
+            entry += "\n"
+            log.write(entry)
+            sql_entry = prepare_sql_entry(entry)
+            sql = "REPLACE INTO %s (url, name, district, businesscircle, period, price, insale, subway, inputdate) VALUES (%s)" % (_TABLE_NAME, sql_entry)
+            print sql
+            conn.execute(sql)
+            conn.commit()
+            print entry
+            seq += 1
+        time.sleep(random.uniform(30, 120))
 conn.close()
