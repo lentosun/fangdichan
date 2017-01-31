@@ -38,8 +38,9 @@ sql_create_table = "CREATE TABLE [%s](\
                   [businesscircle] CHAR,\
                   [period] INTEGER, \
                   [price] FLOAT, \
-                  [subway] CHAR, \
-                  [inputdate] CHAR);" % _TABLE_NAME
+                    [insale] INTEGER, \
+                    [subway] CHAR, \
+                    [inputdate] CHAR);" % _TABLE_NAME
 conn.execute(sql_create_table)
 conn.commit()
 
@@ -75,6 +76,10 @@ dict_xpath = [
     {"name": "price",
      "header": "Price",
      "xpath": "//li[INDEX][@class='clear xiaoquListItem']//div[@class='totalPrice']/span/text()"},
+
+    {"name": "insale",
+     "header": "Insale",
+     "xpath": "//li[INDEX][@class='clear xiaoquListItem']//div[@class='xiaoquListItemSellCount']//span/text()"},
 
     {"name": "subway",
      "header": "Subway",
@@ -165,7 +170,7 @@ for page_url in page_urls:
         entry += "\n"
         log.write(entry)
         sql_entry = prepare_sql_entry(entry)
-        sql = "REPLACE INTO %s (url, name, district, businesscircle, period, price, subway, inputdate) VALUES (%s)" % (_TABLE_NAME, sql_entry)
+        sql = "REPLACE INTO %s (url, name, district, businesscircle, period, price, insale, subway, inputdate) VALUES (%s)" % (_TABLE_NAME, sql_entry)
         print sql
         conn.execute(sql)
         conn.commit()
