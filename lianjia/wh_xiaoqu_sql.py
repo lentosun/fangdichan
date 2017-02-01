@@ -37,9 +37,10 @@ sql_create_table = "CREATE TABLE [%s](\
                   [businesscircle] CHAR,\
                   [period] INTEGER, \
                   [price] FLOAT, \
-                    [insale] INTEGER, \
-                    [subway] CHAR, \
-                    [inputdate] CHAR);" % _TABLE_NAME
+                  [insale] INTEGER, \
+                  [subway] CHAR, \
+                  [salein90] INTEGER, \
+                  [inputdate] CHAR);" % _TABLE_NAME
 conn.execute(sql_create_table)
 conn.commit()
 
@@ -87,7 +88,11 @@ dict_xpath = [
 
     {"name": "subway",
      "header": "Subway",
-     "xpath": "//li[INDEX][@class='clear xiaoquListItem']//div[@class='tagList']//span/text()"}
+     "xpath": "//li[INDEX][@class='clear xiaoquListItem']//div[@class='tagList']//span/text()"},
+
+    {"name": "salein90",
+     "header": "SaleIn90",
+     "xpath": "//li[INDEX][@class='clear xiaoquListItem']//div[@class='houseInfo']/a[1]/text()"}
     ]
 
 tmp_str = ""
@@ -112,9 +117,12 @@ def get_element_by_xpath(dom, xpath):
     return element_list
 
 
-def fetch_number(input_str):
-    output_str = re.findall(r"\d+\.?\d*", input_str)
-    return output_str
+def fetch_number(input_str, index=0):
+    output_list = []
+    tmp_list = re.findall(r"\d+\.?\d*", input_str)
+    if index < len(tmp_list):
+        output_list.append(tmp_list[index])
+    return output_list
 
 
 def clear_utf8_str(input_str):
@@ -122,11 +130,11 @@ def clear_utf8_str(input_str):
     return output_str
 
 
-def prepare_entry(input_list, number=False):
+def prepare_entry(input_list, number=False, index=0):
     entry = ""
     if input_list:
         if number:
-            input_list = fetch_number(input_list[0])
+            input_list = fetch_number(input_list[0], index)
         if input_list:
             entry = clear_utf8_str(input_list[0]) + ","
         else:
@@ -177,6 +185,8 @@ for district in district_list:
                 elements = get_element_by_xpath(dom, xpath)
                 if name_xpath['name'] in to_number_list:
                     entry += prepare_entry(elements, number=True)
+                elif name_xpath['name'] in ['salein90']:
+                    entry += prepare_entry(elements, number=True, index=1)
                 else:
                     entry += prepare_entry(elements)
             entry += _DATE
@@ -185,7 +195,7 @@ for district in district_list:
             entry += "\n"
             log.write(entry)
             sql_entry = prepare_sql_entry(entry)
-            sql = "REPLACE INTO %s (url, name, district, businesscircle, period, price, insale, subway, inputdate) VALUES (%s)" % (_TABLE_NAME, sql_entry)
+            sql = "REPLACE INTO %s (url, name, district, businesscircle, period, price, insale, subway, salein90, inputdate) VALUES (%s)" % (_TABLE_NAME, sql_entry)
             print sql
             conn.execute(sql)
             conn.commit()
