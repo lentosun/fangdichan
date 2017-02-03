@@ -199,7 +199,6 @@ for district in district_list:
             log.write(entry)
             sql_entry = prepare_sql_entry(entry)
             sql = "REPLACE INTO %s (url, name, district, businesscircle, period, price, insale, subway, salein90, inputdate) VALUES (%s)" % (_TABLE_NAME, sql_entry)
-            print sql
             conn.execute(sql)
             conn.commit()
             print entry
