@@ -3,7 +3,7 @@
 
 # author: Yi Sun (lentosun@163.com)
 
-import sys
+import platform
 import os
 import urllib2
 import lxml.html.soupparser as soupparser
@@ -19,6 +19,7 @@ _TIME = datetime.datetime.now().strftime('%Y_%m_%d_%H%M%S')
 _DATE = datetime.datetime.now().strftime('%Y%m%d')
 _LOG_PATH = _FNAME_PREFIX + _TIME + ".csv"
 
+os_type = platform.system().lower()
 log_path = _LOG_PATH
 index = 0
 base_url = "http://wh.lianjia.com/ershoufang/"
@@ -29,6 +30,8 @@ _SQLITE_DB = "wuhan.db"
 _ITEM_PER_PAGE = 30
 _TABLE_NAME = "apartment_%s" % _TIME
 
+if "win" in os_type:
+    _FNAME_PREFIX = "c:/tmp/wuhan_ershou_"
 
 while os.path.exists(log_path):
     log_path = _LOG_PATH + "." + str(index)
