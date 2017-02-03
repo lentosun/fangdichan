@@ -60,39 +60,39 @@ xpath_room_link = "//div[@class='info clear']//div[@class='title']/a/@href"
 dict_xpath = [
     {"name": "url",
      "header": "URL",
-     "xpath": "//li[INDEX][@class='clear']//div[@class='info clear']//div[@class='title']/a/@href"},
+     "xpath": "//li[@class='clear'][INDEX]//div[@class='info clear']//div[@class='title']/a/@href"},
 
     {"name": "title",
      "header": "Name",
-     "xpath": "//li[INDEX][@class='clear']//div[@class='info clear']//div[@class='title']/a/text()"},
+     "xpath": "//li[@class='clear'][INDEX]//div[@class='info clear']//div[@class='title']/a/text()"},
 
     {"name": "xiaoqu",
      "header": "Xiaoqu",
-     "xpath": "//li[INDEX][@class='clear']//div[@class='info clear']//div[@class='houseInfo']/a[@data-el='region']/text()"},
+     "xpath": "//li[@class='clear'][INDEX]//div[@class='info clear']//div[@class='houseInfo']/a[@data-el='region']/text()"},
 
     {"name": "xiaoqu_url",
      "header": "XiaoquURL",
-     "xpath": "//li[INDEX][@class='clear']//div[@class='info clear']//div[@class='houseInfo']/a[@data-el='region']/@href"},
+     "xpath": "//li[@class='clear'][INDEX]//div[@class='info clear']//div[@class='houseInfo']/a[@data-el='region']/@href"},
 
     {"name": "detail",
      "header": "Huxing,Area,OtherDetail",
-     "xpath": "//li[INDEX][@class='clear']//div[@class='info clear']//div[@class='houseInfo']/text()"},
+     "xpath": "//li[@class='clear'][INDEX]//div[@class='info clear']//div[@class='houseInfo']/text()"},
 
     {"name": "follow",
      "header": "Watch,Visit,PublishDate",
-     "xpath": "//li[INDEX][@class='clear']//div[@class='info clear']//div[@class='followInfo']/text()"},
+     "xpath": "//li[@class='clear'][INDEX]//div[@class='info clear']//div[@class='followInfo']/text()"},
 
     {"name": "total_price",
      "header": "TotalPrice",
-     "xpath": "//li[INDEX][@class='clear']//div[@class='info clear']//div[@class='totalPrice']/span/text()"},
+     "xpath": "//li[@class='clear'][INDEX]//div[@class='info clear']//div[@class='totalPrice']/span/text()"},
 
     {"name": "unit_price",
      "header": "UnitPrice",
-     "xpath": "//li[INDEX][@class='clear']//div[@class='info clear']//div[@class='unitPrice']/span/text()"},
+     "xpath": "//li[@class='clear'][INDEX]//div[@class='info clear']//div[@class='unitPrice']/span/text()"},
 
     {"name": "subway",
      "header": "Subway",
-     "xpath": "//li[INDEX][@class='clear']//div[@class='info clear']//div[@class='tag']/span[@class='subway']/text()"}
+     "xpath": "//li[@class='clear'][INDEX]//div[@class='info clear']//div[@class='tag']/span[@class='subway']/text()"}
 ]
 
 
