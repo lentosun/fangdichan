@@ -3,7 +3,7 @@
 
 # author: Yi Sun (lentosun@163.com)
 
-import sys
+import platform
 import os
 import urllib2
 import lxml.html.soupparser as soupparser
@@ -14,7 +14,7 @@ import re
 import sqlite3
 
 
-_FNAME_PREFIX = "c:/tmp/wuhan_xiaoqu_"
+_FNAME_PREFIX = "/tmp/wuhan_xiaoqu_"
 _TIME = datetime.datetime.now().strftime('%Y_%m_%d_%H%M%S')
 _DATE = datetime.datetime.now().strftime('%Y%m%d')
 _LOG_PATH = _FNAME_PREFIX + _TIME + ".csv"
@@ -22,13 +22,16 @@ _SQLITE_DB = "wuhan.db"
 _ITEM_PER_PAGE = 30
 _TABLE_NAME = "xiaoqu_%s" % _TIME
 
+os_type = platform.system().lower()
 log_path = _LOG_PATH
 index = 0
 base_url = "http://wh.lianjia.com/xiaoqu/"
 #sort = "cro11"
 #total_page_number = 100
 
-
+if "win" in os_type:
+    _FNAME_PREFIX = "c:/tmp/wuhan_xiaoqu_"
+    
 conn = sqlite3.connect(_SQLITE_DB)
 sql_create_table = "CREATE TABLE [%s](\
                   [url] CHAR PRIMARY KEY ON CONFLICT REPLACE UNIQUE ON CONFLICT REPLACE,\
