@@ -60,39 +60,39 @@ total_item_xpath = "//div[@class='content']//h2[@class='total fl']/span/text()"
 dict_xpath = [
     {"name": "url",
      "header": "URL",
-     "xpath": "//li[INDEX][@class='clear xiaoquListItem']//div[@class='info']//div[@class='title']//a/@href"},
+     "xpath": "//li[@class='clear xiaoquListItem'][INDEX]//div[@class='info']//div[@class='title']//a/@href"},
 
     {"name": "title",
      "header": "Name",
-     "xpath": "//li[INDEX][@class='clear xiaoquListItem']//div[@class='info']//div[@class='title']//a/text()"},
+     "xpath": "//li[@class='clear xiaoquListItem'][INDEX]//div[@class='info']//div[@class='title']//a/text()"},
 
     {"name": "district",
      "header": "District",
-     "xpath": "//li[INDEX][@class='clear xiaoquListItem']//a[@class='district']/text()"},
+     "xpath": "//li[@class='clear xiaoquListItem'][INDEX]//a[@class='district']/text()"},
 
     {"name": "bizcircle",
      "header": "BusinessCircle",
-     "xpath": "//li[INDEX][@class='clear xiaoquListItem']//a[@class='bizcircle']/text()"},
+     "xpath": "//li[@class='clear xiaoquListItem'][INDEX]//a[@class='bizcircle']/text()"},
 
     {"name": "period",
      "header": "Period",
-     "xpath": "//li[INDEX][@class='clear xiaoquListItem']//div[@class='positionInfo']/text()[last()]"},
+     "xpath": "//li[@class='clear xiaoquListItem'][INDEX]//div[@class='positionInfo']/text()[last()]"},
 
     {"name": "price",
      "header": "Price",
-     "xpath": "//li[INDEX][@class='clear xiaoquListItem']//div[@class='totalPrice']/span/text()"},
+     "xpath": "//li[@class='clear xiaoquListItem'][INDEX]//div[@class='totalPrice']/span/text()"},
 
     {"name": "insale",
      "header": "Insale",
-     "xpath": "//li[INDEX][@class='clear xiaoquListItem']//div[@class='xiaoquListItemSellCount']//span/text()"},
+     "xpath": "//li[@class='clear xiaoquListItem'][INDEX]//div[@class='xiaoquListItemSellCount']//span/text()"},
 
     {"name": "subway",
      "header": "Subway",
-     "xpath": "//li[INDEX][@class='clear xiaoquListItem']//div[@class='tagList']//span/text()"},
+     "xpath": "//li[@class='clear xiaoquListItem'][INDEX]//div[@class='tagList']//span/text()"},
 
     {"name": "salein90",
      "header": "SaleIn90",
-     "xpath": "//li[INDEX][@class='clear xiaoquListItem']//div[@class='houseInfo']/a[1]/text()"}
+     "xpath": "//li[@class='clear xiaoquListItem'][INDEX]//div[@class='houseInfo']/a[1]/text()"}
     ]
 
 tmp_str = ""
