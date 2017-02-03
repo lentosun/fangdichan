@@ -203,7 +203,6 @@ for page_url in page_urls:
             if name_xpath['name'] in to_number_list:
                 entry += prepare_entry(elements, number=True)
             elif name_xpath['name'] in ['detail']:
-                print elements
                 tmp_list = devide_details(elements, " ", [2])
                 tmp_list = format_list(tmp_list, 3)
                 tmp_str = conv_l2s(tmp_list)
