@@ -109,8 +109,20 @@ to_number_list = ["period", "price"]
 
 
 def get_dom_by_url(url):
-    page_content = urllib2.urlopen(url).read()
-    page_dom = soupparser.fromstring(page_content)
+    page_dom = None
+    fails = 0
+    while True:
+        try:
+            if fails >= 20:
+                break
+            page_content = urllib2.urlopen(url, None, 10).read()
+            page_dom = soupparser.fromstring(page_content)
+        except:
+            fails += 1
+            print '网络连接出现问题, 正在尝试再次请求: %s ' % fails
+            time.sleep(5)
+        else:
+            break
     return page_dom
 
 
